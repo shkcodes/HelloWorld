@@ -1,9 +1,7 @@
 version: 2
 jobs:
   build:
-
-    -run: yes | sdkmanager --licenses || exit 0
-      : yes | sdkmanager --update || exit 0
+    -run: yes | sdkmanager --licenses
     working_directory: ~/code
     docker:
     - image: circleci/android:api-28-alpha
@@ -26,5 +24,4 @@ jobs:
     - store_artifacts:
         path: app/build/reports
         destination: reports
-    - store_test_results:
 path: app/build/test-results
