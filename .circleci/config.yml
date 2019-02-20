@@ -35,7 +35,7 @@ jobs:
         at: ./artifacts
     - run:
         name: "Publish Release on GitHub"
-        command: ghr -t ${GITHUB_API_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1}
+        command: ghr -t ${GITHUB_API_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} v0.1.0 app/build/outputs/apk/
 
 workflows:
   version: 2
@@ -44,4 +44,4 @@ workflows:
     - build
     - publish-github-release:
         requires:
-        - build
+          - build
