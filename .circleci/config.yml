@@ -44,11 +44,20 @@ jobs:
         name: "Publish Release on GitHub"
         command: ghr -t ${GITHUB_API_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} v${CIRCLE_BUILD_NUM} artifacts/debug
 
+  run-python-script:
+      docker:
+      - image: circleci/python:3.6.4  # primary container for the build job
+      steps:
+      - run:
+          command: |
+            pipenv run "python py.py"
+
 workflows:
   version: 2
   build_and_deploy:
     jobs:
     - build
+    - run-python-script
     - publish-github-release:
         requires:
           - build
