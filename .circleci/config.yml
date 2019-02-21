@@ -27,6 +27,13 @@ jobs:
     - store_artifacts:
         path: app/build/outputs/apk/
         destination: apks/
+    - persist_to_workspace:
+        # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+        # taken to be the root directory of the workspace.
+        root: /home/circleci/
+        # Must be relative path from root
+        paths:
+        - code
   publish-github-release:
     docker:
     - image: cibuilds/github:0.10
@@ -35,7 +42,7 @@ jobs:
         at: ./artifacts
     - run:
         name: "Publish Release on GitHub"
-        command: ghr -t ${GITHUB_API_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} v0.1.0 app/build/outputs/apk/
+        command: ghr -t ${GITHUB_API_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} v0.1.0 artifacts/code
 
 workflows:
   version: 2
