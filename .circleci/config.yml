@@ -27,6 +27,18 @@ jobs:
     - store_artifacts:
         path: app/build/outputs/apk/
         destination: apks/
+    - run:
+        name: Test Script
+        command: |
+            # My example bash script
+            echo "Hello World"
+            get_latest_release() {
+              curl --silent "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub api
+                grep '"assets_url":' |                                            # Get tag line
+                sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
+            }
+            # Usage
+            get_latest_release "shkcodes/HelloWorld"
     - persist_to_workspace:
         # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
         # taken to be the root directory of the workspace.
@@ -35,6 +47,7 @@ jobs:
         paths:
         - debug/*
   publish-github-release:
+    working_directory: ~/code
     docker:
     - image: cibuilds/github:0.10
     steps:
@@ -43,7 +56,6 @@ jobs:
     - run:
         name: "Publish Release on GitHub"
         command: ghr -t ${GITHUB_API_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} v${CIRCLE_BUILD_NUM} artifacts/debug
-
 workflows:
   version: 2
   build_and_deploy:
