@@ -30,8 +30,8 @@ jobs:
         name: Initial build
         command: ./gradlew clean assembleDebug --stacktrace
     - run:
-        name: Test python
-        command: python py.py
+        name: Fetch last release
+        command: python fetch_last_release.py
     - store_artifacts:
         path: app/build/outputs/apk/
         destination: apks/
