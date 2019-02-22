@@ -1,0 +1,19 @@
+import json
+import requests
+import os
+from itertools import islice
+
+user = os.environ["CIRCLE_PROJECT_USERNAME"]
+project = os.environ["CIRCLE_PROJECT_REPONAME"]
+pr_no = os.environ["CIRCLE_PR_NUMBER"]
+body = ""
+with open("apkDiff.txt") as apk_diff:
+    for line in islice(apk_diff, 5):
+        body += line
+
+payload = {
+    'body': body
+}
+response = requests.post('https://api.github.com/repos/' + user + '/' + project + '/issues/' + pr_no + '/comments',
+                         data=json.dumps(payload),
+                         headers={'Authorization': 'token 43476a3f73a235903f6d6fc493cd5212fac05c49'})
