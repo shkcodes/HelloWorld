@@ -13,7 +13,7 @@ jobs:
     - checkout
     - run:
         name: Install requests
-        command: sudo pip install requests | sudo pip install tabulate
+        command: sudo pip install requests | sudo pip install pytablewriter
     - restore_cache:
         key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
     #      - run:
