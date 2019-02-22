@@ -27,13 +27,13 @@ jobs:
         - ~/.gradle
         key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
     - run:
-        name: Initial build
+        name: Build
         command: ./gradlew clean assembleDebug --stacktrace
     - run:
         name: Fetch last release
         command: python fetch_last_release.py
     - run:
-        name: Get previous release size
+        name: Diff apks
         command: apkanalyzer -h apk compare old.apk app/build/outputs/apk/debug/app-debug.apk > apkDiff.txt
     - store_artifacts:
         path: app/build/outputs/apk/
