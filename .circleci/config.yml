@@ -13,7 +13,7 @@ jobs:
     - checkout
     - run:
         name: Install requests
-        command: sudo pip install requests
+        command: sudo pip install requests | sudo pip install tabulate
     - restore_cache:
         key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
     #      - run:
@@ -34,7 +34,7 @@ jobs:
         command: python fetch_last_release.py
     - run:
         name: Diff apks
-        command: apkanalyzer -h apk compare old.apk app/build/outputs/apk/debug/app-debug.apk > apkDiff.txt
+        command: apkanalyzer apk compare old.apk app/build/outputs/apk/debug/app-debug.apk > apkDiff.txt
     - run:
         name: Post apk stats on PR
         command: python post_comment.py
