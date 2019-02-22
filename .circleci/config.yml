@@ -35,6 +35,9 @@ jobs:
     - run:
         name: Diff apks
         command: apkanalyzer -h apk compare old.apk app/build/outputs/apk/debug/app-debug.apk > apkDiff.txt
+    - run:
+        name: Post apk stats on PR
+        command: python post_comment.py
     - store_artifacts:
         path: app/build/outputs/apk/
         destination: apks/
