@@ -32,6 +32,9 @@ jobs:
     - run:
         name: Fetch last release
         command: python fetch_last_release.py
+    - run:
+        name: Get previous release size
+        command: cd code | apkanalyzer -h apk file-size old.apk
     - store_artifacts:
         path: app/build/outputs/apk/
         destination: apks/
