@@ -2,7 +2,8 @@ import json
 import requests
 import os
 from itertools import islice
-from tabulate import tabulate
+import pytablewriter
+import re
 
 user = os.environ["CIRCLE_PROJECT_USERNAME"]
 project = os.environ["CIRCLE_PROJECT_REPONAME"]
@@ -21,7 +22,7 @@ re.split('\t', lines[0])
 
 for line in lines:
     tabs = re.split('\t', line)
-    if "classes" in tabs[3]:
+    if "classes" in tabs[3] and ".dex" in tabs[3]:
         classesDexSize += float(tabs[2])
     if "/res/" in tabs[3]:
         resSize += float(tabs[2])
@@ -33,11 +34,15 @@ resSize = str(decimalFormatter.format(resSize * byteToMBMultiplier))
 layoutSize = str(decimalFormatter.format(layoutSize * byteToMBMultiplier))
 apkSize = str(decimalFormatter.format(float(re.split('\t', lines[0])[2]) * byteToMBMultiplier))
 
-body = tabulate([["apk size", apkSize + "MB"],
-                ["dex size", classesDexSize + "MB"],
-                ["res size", resSize + "MB"],
-                ["layout size", layoutSize + "MB"]],
-               tablefmt="grid")
+
+writer = pytablewriter.MarkdownTableWriter()
+writer.headers = ["", ""]
+writer.value_matrix = [["APK SIZE", apkSize + "MB"],
+                       ["DEX SIZE", classesDexSize + "MB"],
+                       ["RES SIZE", resSize + "MB"],
+                       ["LAYOUT SIZE", layoutSize + "MB"]]
+
+body = writer.dumps()
 payload = {
     'body': body
 }
