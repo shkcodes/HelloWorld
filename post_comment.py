@@ -5,7 +5,9 @@ from itertools import islice
 
 user = os.environ["CIRCLE_PROJECT_USERNAME"]
 project = os.environ["CIRCLE_PROJECT_REPONAME"]
-pr_no = os.environ["CIRCLE_PR_NUMBER"]
+pr_url = os.environ["CIRCLE_PULL_REQUEST"]
+pr_no = pr_url[len(pr_url)-1]
+print(pr_no)
 body = ""
 with open("apkDiff.txt") as apk_diff:
     for line in islice(apk_diff, 5):
