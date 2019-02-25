@@ -13,7 +13,7 @@ jobs:
     - checkout
     - run:
         name: Install requests
-        command: sudo pip install requests | sudo pip install tabulate
+        command: sudo pip install requests | sudo pip install pytablewriter
     - restore_cache:
         key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
     #      - run:
@@ -69,7 +69,7 @@ jobs:
         at: ./artifacts
     - run:
         name: "Publish Release on GitHub"
-        command: ghr -t ${GITHUB_API_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} v0.1.0 artifacts/debug
+        command: zip -r deploy.zip debug | ghr -t ${GITHUB_API_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} v0.1.0 artifacts/debug
 workflows:
   version: 2
   build_and_deploy:
